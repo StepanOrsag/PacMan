@@ -16,6 +16,7 @@ int main() {
 	sf::Text scoreText(font, "Score: " + std::to_string(0));
 	scoreText.setFillColor(sf::Color::White);
 	scoreText.setCharacterSize(24);
+	sf::Clock clock;
 
 	while (window.isOpen()) {
 		while (const std::optional event = window.pollEvent()) {
@@ -31,17 +32,22 @@ int main() {
 		}
 		int dx = 0;
 		int dy = 0;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
+		sf::Time elapsed = clock.getElapsedTime();
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left) && elapsed.asSeconds() > 0.2) {
 			dx = -1;
+			clock.restart();
 		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right) && elapsed.asSeconds() > 0.2) {
 			dx = 1;
+			clock.restart();
 		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)) {
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up) && elapsed.asSeconds() > 0.2) {
 			dy = -1;
+			clock.restart();
 		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)) {
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down) && elapsed.asSeconds() > 0.2) {
 			dy = 1;
+			clock.restart();
 		}
 		int futureX = 0;
 		int futureY = 0;
@@ -54,7 +60,7 @@ int main() {
 				player.addScore(map.tryEatDot(futureX, futureY));
 			}
 		}
-		
+
 		scoreText.setString("Score: " + std::to_string(player.getScore()));
 		window.clear();
 		map.draw(window);
