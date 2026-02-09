@@ -16,8 +16,38 @@ int main() {
 	sf::Text scoreText(font, "Score: " + std::to_string(0));
 	scoreText.setFillColor(sf::Color::White);
 	scoreText.setCharacterSize(24);
-	sf::Clock clock;
 
+	sf::Text pressToPlay(font, ">> Press ENTER to start <<");
+	sf::FloatRect textRect = pressToPlay.getLocalBounds();
+	pressToPlay.setOrigin(textRect.getCenter());
+	pressToPlay.setPosition(sf::Vector2f(w / 2, h / 2));
+	
+	sf::Clock clock;
+	sf::Clock blinkClock;
+
+	while (!sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Enter)) {
+		while (const std::optional event = window.pollEvent()) {
+			if (event->is<sf::Event::Closed>()) {
+				window.close();
+			}
+		}
+
+		sf::Time elapsedTime = blinkClock.getElapsedTime();
+		bool showText = blinkClock.getElapsedTime().asSeconds() < 1;
+
+		if (elapsedTime.asSeconds() > 1.5f) {
+			blinkClock.restart();
+		}
+
+		window.clear();
+		map.draw(window);
+		player.draw(window);
+		if (showText) {
+			window.draw(pressToPlay);
+		}
+		window.display();
+
+	}
 	while (window.isOpen()) {
 		while (const std::optional event = window.pollEvent()) {
 			if (event->is<sf::Event::Closed>()) {
@@ -33,19 +63,19 @@ int main() {
 		int dx = 0;
 		int dy = 0;
 		sf::Time elapsed = clock.getElapsedTime();
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left) && elapsed.asSeconds() > 0.2) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left) && elapsed.asSeconds() > 0.15) {
 			dx = -1;
 			clock.restart();
 		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right) && elapsed.asSeconds() > 0.2) {
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right) && elapsed.asSeconds() > 0.15) {
 			dx = 1;
 			clock.restart();
 		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up) && elapsed.asSeconds() > 0.2) {
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up) && elapsed.asSeconds() > 0.15) {
 			dy = -1;
 			clock.restart();
 		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down) && elapsed.asSeconds() > 0.2) {
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down) && elapsed.asSeconds() > 0.15) {
 			dy = 1;
 			clock.restart();
 		}
