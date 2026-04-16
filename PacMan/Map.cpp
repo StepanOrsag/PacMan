@@ -9,7 +9,7 @@ Map::Map(float size) : tileSize(size) {
 
 	dotShape.setRadius(tileSize / 8);
 	dotShape.setFillColor(sf::Color::Magenta);
-	dotShape.setOrigin(sf::Vector2(tileSize / 8, tileSize / 8));
+	dotShape.setOrigin(sf::Vector2f(tileSize / 8, tileSize / 8));
 
 	grid = {
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
